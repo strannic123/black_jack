@@ -1,16 +1,21 @@
 <template>
   <div id="app">
-    {{ getFullDeck }}
-    <hr>
+    <div class="wrapper">
+      <h1 class="header">Black Jack</h1>
+      <div class="gameField">
+        <div class="dealer">
+          <Card :cards="getDealerCards"/>
+        </div>
 
-    <div class="dealer">
-        <Card :cards="getDealerCards"/>
+        <div class="player">
+
+          <Card :cards="getPlayerCards"/>
+        </div>
+      </div>
+      <div class="buttons">
+        <h3>Компонент с кнопками</h3>
+      </div>
     </div>
-
-    <div class="player">
-      <Card :cards="getPlayerCards"/>
-    </div>
-
   </div>
 </template>
 
@@ -37,6 +42,8 @@ export default {
       'getPlayerCards', {getPlayerCards: 'getPlayerCards'}
     ]),
 
+
+
   },
   async created() {
     await this.$store.dispatch('fullDeckCard')
@@ -59,11 +66,27 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+.wrapper {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.gameField {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  flex: 1 1 auto;
 }
 
 .dealer,
 .player {
-  display: flex;
+
 }
 </style>
