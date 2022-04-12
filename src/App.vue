@@ -4,11 +4,12 @@
       <h1 class="header">Black Jack</h1>
       <div class="gameField">
         <div class="dealer">
+          <h3 class="points">Очки диллера: {{sumPoints(getDealerCards)}}</h3>
           <Card :cards="getDealerCards"/>
         </div>
 
         <div class="player">
-
+          <h3 class="points">Очки игрока: {{sumPoints(getPlayerCards)}}</h3>
           <Card :cards="getPlayerCards"/>
         </div>
       </div>
@@ -22,6 +23,7 @@
 <script>
 import Card from "./components/Card";
 import {mapGetters} from 'vuex'
+
 
 export default {
   name: 'App',
@@ -39,7 +41,7 @@ export default {
       'getDeckIdForSet', {getDeckIdForSet: 'getDeckIdForSet'},
       'getDeckId', {getDeckId: 'getDeckId'},
       'getDealerCards', {getDealerCards: 'getDealerCards'},
-      'getPlayerCards', {getPlayerCards: 'getPlayerCards'}
+      'getPlayerCards', {getPlayerCards: 'getPlayerCards'},
     ]),
 
 
@@ -55,7 +57,38 @@ export default {
   mounted() {
 
   },
-  methods: {}
+  methods: {
+    sumPoints(arr) {
+      console.log('SUMPOINT', arr)
+      let nameDeckValue = ['JACK', 'QUEEN', 'KING']
+      let cardAce = 'ACE'
+      let result = 0
+
+      arr.forEach(card => {
+        if(nameDeckValue.includes(card.value)) {
+          result += 10
+        }
+
+        if(cardAce.includes(card.value)) {
+
+          if(result + 11 <= 21) {
+            result += 11
+          } else {
+            result += 1
+          }
+        }
+
+        if(!cardAce.includes(card.value) && !nameDeckValue.includes(card.value)) {
+          result += +card.value
+        }
+
+      })
+      console.log('SUM_POINT_RESULT', result)
+      return result
+
+
+    }
+  }
 }
 </script>
 
@@ -74,6 +107,7 @@ export default {
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
+  background-image: url("./assets/img/var_1.jpg");
 }
 
 .gameField {
@@ -88,5 +122,10 @@ export default {
 .dealer,
 .player {
 
+}
+
+.points {
+  color: yellow;
+  font-size: 32px;
 }
 </style>

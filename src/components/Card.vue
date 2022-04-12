@@ -28,7 +28,7 @@ export default {
 }
 
 .card img {
-  width: 100px;
+  width: 150px;
 }
 
 </style>
