@@ -2,28 +2,20 @@
   <div id="app">
     {{ getFullDeck }}
     <hr>
-    <!--    <button @click="clickBtn" >Click</button>-->
 
-    <hr>
     <div class="dealer">
-      DEALER:{{getDealerCards}}
-      <div class="card" v-for="card in getDealerCards" :key="card.code">
-        <img :src="`${card.images.svg}`" alt="`${card.value} ${card.suit}`">
-
-      </div>
+        <Card :cards="getDealerCards"/>
     </div>
-    <div class="player">
-      PLAYER:{{getPlayerCards}}
-      <div class="card" v-for="card in getPlayerCards" :key="card.code">
-        <img :src="`${card.images.svg}`" alt="`${card.value} ${card.suit}`">
 
-      </div>
+    <div class="player">
+      <Card :cards="getPlayerCards"/>
     </div>
 
   </div>
 </template>
 
 <script>
+import Card from "./components/Card";
 import {mapGetters} from 'vuex'
 
 export default {
@@ -33,24 +25,25 @@ export default {
       firstTreeCard: false
     }
   },
-  components: {},
+  components: {
+    Card
+  },
   computed: {
     ...mapGetters([
       'getFullDeck', {getFullDeck: 'getFullDeck'},
       'getDeckIdForSet', {getDeckIdForSet: 'getDeckIdForSet'},
       'getDeckId', {getDeckId: 'getDeckId'},
-      'getPlayerCards', {getPlayerCards: 'getPlayerCards'},
-      'getDealerCards', {getDealerCards: 'getDealerCards'}
+      'getDealerCards', {getDealerCards: 'getDealerCards'},
+      'getPlayerCards', {getPlayerCards: 'getPlayerCards'}
     ]),
 
   },
   async created() {
     await this.$store.dispatch('fullDeckCard')
     await this.$store.dispatch('saveIdDeck')
-    if (!this.firstTreeCard) {
-      await this.$store.dispatch('getFirstThreeCardForStart')
-      this.firstTreeCard = true
-    }
+    await this.$store.dispatch('getFirstThreeCardForStart')
+
+
   },
   mounted() {
 
@@ -67,5 +60,10 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.dealer,
+.player {
+  display: flex;
 }
 </style>
