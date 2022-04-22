@@ -4,17 +4,19 @@
       <h1 class="header">Black Jack</h1>
       <div class="gameField">
         <div class="dealer">
-          <h3 class="points">Очки диллера: {{sumPoints(getDealerCards)}}</h3>
+<!--          <h3 class="points">Очки диллера: {{sumPoints(this.getPlayerCards, 'dealer')}}</h3>-->
+          <h3 class="points">Очки дилера: {{dealerBlackJack ? 'Black JACK' : sumPoints(this.getDealerCards, 'dealer')}}</h3>
           <Card :cards="getDealerCards"/>
         </div>
 
         <div class="player">
-          <h3 class="points">Очки игрока: {{sumPoints(getPlayerCards)}}</h3>
+<!--          <h3 class="points">Очки игрока: {{sumPoints(this.getDealerCards, 'player')}}</h3>-->
+          <h3 class="points">Очки игрока: {{playerBlackJack ? 'Black JACK' : sumPoints(this.getPlayerCards, 'player')}}</h3>
           <Card :cards="getPlayerCards"/>
         </div>
       </div>
       <div class="buttons">
-        <h3>Компонент с кнопками</h3>
+        <h3>Компонент с кнопками</h3>sum
       </div>
     </div>
   </div>
@@ -29,7 +31,14 @@ export default {
   name: 'App',
   data() {
     return {
-      firstTreeCard: false
+      firstTreeCard: false,
+      nameDeckValue: ['JACK', 'QUEEN', 'KING', 'ACE'],
+      playerSumPoints: 0,
+      dealerSumPoints: 0,
+      countAcePlayer: 0,
+      countAceDealer: 0,
+      playerBlackJack: false,
+      dealerBlackJack: false,
     }
   },
   components: {
@@ -46,6 +55,9 @@ export default {
 
 
 
+
+
+
   },
   async created() {
     await this.$store.dispatch('fullDeckCard')
@@ -58,35 +70,38 @@ export default {
 
   },
   methods: {
-    sumPoints(arr) {
-      console.log('SUMPOINT', arr)
-      let nameDeckValue = ['JACK', 'QUEEN', 'KING']
-      let cardAce = 'ACE'
-      let result = 0
-
+    sumPoints(arr, who) {
+      let fullPoints = 0
+      // Получаем данные и считаем
       arr.forEach(card => {
-        if(nameDeckValue.includes(card.value)) {
-          result += 10
-        }
-
-        if(cardAce.includes(card.value)) {
-
-          if(result + 11 <= 21) {
-            result += 11
-          } else {
-            result += 1
-          }
-        }
-
-        if(!cardAce.includes(card.value) && !nameDeckValue.includes(card.value)) {
-          result += +card.value
-        }
+        fullPoints  += this.getValueCard(this.countAceCards(card, who))
 
       })
-      console.log('SUM_POINT_RESULT', result)
-      return result
 
+      return fullPoints
+    },
 
+    // проверяем номинал карт
+    getValueCard(card) {
+      if(isNaN(card.value) && card.value !== 'ACE') {
+        return 10
+      } else if(card.value === 'ACE') {
+        return 11
+      } else {
+        return +card.value
+      }
+    },
+
+    // считаем все карты
+    countAceCards(value, who) {
+      if(value === 11) {
+        if(who === 'dealer') {
+          this.countAceDealer += 1
+        } else {
+          this.countAcePlayer += 1
+        }
+      }
+      return value
     }
   }
 }
