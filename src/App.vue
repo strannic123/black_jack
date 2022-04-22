@@ -4,20 +4,20 @@
       <h1 class="header">Black Jack</h1>
       <div class="gameField">
         <div class="dealer">
-<!--          <h3 class="points">Очки диллера: {{sumPoints(this.getPlayerCards, 'dealer')}}</h3>-->
-          <h3 class="points">Очки дилера: {{dealerBlackJack ? 'Black JACK' : sumPoints(this.getDealerCards, 'dealer')}}</h3>
+          <h3 class="points">Очки дилера: {{dealerBlackJack ? 'Black JACK' : checkNewCardDealer}}</h3>
           <Card :cards="getDealerCards"/>
         </div>
 
         <div class="player">
-<!--          <h3 class="points">Очки игрока: {{sumPoints(this.getDealerCards, 'player')}}</h3>-->
-          <h3 class="points">Очки игрока: {{playerBlackJack ? 'Black JACK' : sumPoints(this.getPlayerCards, 'player')}}</h3>
+          <h3 class="points">Очки игрока: {{playerBlackJack ? 'Black JACK' : checkNewCardPlayer}}</h3>
           <Card :cards="getPlayerCards"/>
         </div>
+        <div class="buttons">
+          <Button :title="'STAY'"/>
+          <Button :title="'HIT'"/>
+        </div>
       </div>
-      <div class="buttons">
-        <h3>Компонент с кнопками</h3>sum
-      </div>
+
     </div>
   </div>
 </template>
@@ -25,6 +25,7 @@
 <script>
 import Card from "./components/Card";
 import {mapGetters} from 'vuex'
+import Button from "./components/Button";
 
 
 export default {
@@ -39,20 +40,43 @@ export default {
       countAceDealer: 0,
       playerBlackJack: false,
       dealerBlackJack: false,
+      winner: 'no-winner'
     }
   },
   components: {
-    Card
+    Card,
+    Button
   },
   computed: {
     ...mapGetters([
-      'getFullDeck', {getFullDeck: 'getFullDeck'},
-      'getDeckIdForSet', {getDeckIdForSet: 'getDeckIdForSet'},
-      'getDeckId', {getDeckId: 'getDeckId'},
-      'getDealerCards', {getDealerCards: 'getDealerCards'},
-      'getPlayerCards', {getPlayerCards: 'getPlayerCards'},
+       'getFullDeck',
+       'getDeckIdForSet',
+      'getDeckId',
+      'getDealerCards',
+      'getPlayerCards',
     ]),
 
+    checkNewCardDealer() {
+      this.playerSumPoints =  this.sumPoints(this.askBlackJack(this.getDealerCards, 'dealer'), 'dealer')
+      return this.playerSumPoints
+    },
+    checkNewCardPlayer() {
+      this.dealerSumPoints = this.sumPoints(
+          this.askBlackJack(this.getPlayerCards, 'player'), 'player')
+      return this.dealerSumPoints
+    },
+
+    setWinner() {
+      if(this.dealerBlackJack) {
+        this.winner = 'dealer'
+      }
+      if(this.playerBlackJack) {
+        this.winner = 'player'
+      }
+      if(this.playerSumPoints > 21) {
+        this.winner = 'dealer'
+      }
+    }
 
 
 
@@ -62,7 +86,7 @@ export default {
   async created() {
     await this.$store.dispatch('fullDeckCard')
     await this.$store.dispatch('saveIdDeck')
-    await this.$store.dispatch('getFirstThreeCardForStart')
+    // await this.$store.dispatch('getFirstThreeCardForStart')
 
 
   },
@@ -70,15 +94,63 @@ export default {
 
   },
   methods: {
+    //считаем очки игрока с учетом тузов
+    checkingPointsPlayer(num, numAce){
+      // while (num > 21 && numAce > 0) {
+      //   num -= 10
+      //   numAce -= 1
+      // }
+      this.playerSumPoints = num
+      return num
+    },
+    //считаем очки dealer с учетом тузов
+    checkingPointsDealer(num, numAce){
+      // while (num > 17 && numAce > 0) {
+      //   num -= 10
+      //   numAce -= 1
+      // }
+      this.dealerSumPoints = num
+      return num
+    },
+    // устанавливаем в Data победителя с Black Jack
+   async setBlackJackData(num, who) {
+        if(who === 'dealer') {
+          this.dealerBlackJack = true
+        } else {
+          this.playerBlackJack = true
+        }
+     await this.setWinner
+
+    },
+    // проверка на Black Jack с раздачи
+    askBlackJack(arr, who) {
+      if(arr.length === 2) {
+        let blackJack = 0
+        arr.forEach(card => {
+          blackJack += this.getValueCard(card)
+        })
+        if(blackJack === 21) {
+          this.setBlackJackData(blackJack, who)
+        }
+      }
+      return arr
+
+    },
+    // считаем сумму очков
     sumPoints(arr, who) {
       let fullPoints = 0
-      // Получаем данные и считаем
       arr.forEach(card => {
-        fullPoints  += this.getValueCard(this.countAceCards(card, who))
+        fullPoints  += this.countAceCards(this.getValueCard(card, who))
 
       })
+      // if(who === 'dealer') {
+      //   return this.checkingPointsDealer(fullPoints, this.countAceDealer)
+      // }
+      // if(who === 'player') {
+      //  return  this.checkingPointsPlayer(fullPoints, this.countAcePlayer)
+      // }
 
-      return fullPoints
+     return fullPoints  // дописать return в IF выше !!!
     },
 
     // проверяем номинал карт
@@ -142,5 +214,6 @@ export default {
 .points {
   color: yellow;
   font-size: 32px;
+  margin-bottom: 20px;
 }
 </style>
