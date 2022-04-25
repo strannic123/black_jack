@@ -18,7 +18,12 @@ export default {
   },
   methods: {
     nextCard(key) {
-      this.$store.dispatch('getNextCard', key)
+      if(key === 'HIT') {
+        this.$store.dispatch('getNextCard', key)
+      }
+      if(key === 'STAY') {
+        this.$emit('toggleGamer', 'dealer')
+      }
     }
   }
 }

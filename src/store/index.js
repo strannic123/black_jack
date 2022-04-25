@@ -42,7 +42,8 @@ export default new Vuex.Store({
                 "value": "ACE",
                 "suit": "HEARTS"
             }
-        ]
+        ],
+
 
     },
     getters: {

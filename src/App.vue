@@ -13,7 +13,7 @@
           <Card :cards="getPlayerCards"/>
         </div>
         <div class="buttons">
-          <Button :title="'STAY'"/>
+          <Button @toggleGamer="changeGamer " :title="'STAY'"/>
           <Button :title="'HIT'"/>
         </div>
       </div>
@@ -40,6 +40,7 @@ export default {
       countAceDealer: 0,
       playerBlackJack: false,
       dealerBlackJack: false,
+      whoMoveGame: 'player', // кто играет
       winner: 'no-winner'
     }
   },
@@ -57,13 +58,14 @@ export default {
     ]),
 
     checkNewCardDealer() {
-      this.playerSumPoints =  this.sumPoints(this.askBlackJack(this.getDealerCards, 'dealer'), 'dealer')
+      this.playerSumPoints =  this.sumPoints(this.askBlackJack(
+          this.getDealerCards, 'dealer'), 'dealer')
       return this.playerSumPoints
     },
     checkNewCardPlayer() {
       this.dealerSumPoints = this.sumPoints(
           this.askBlackJack(this.getPlayerCards, 'player'), 'player')
-      return this.dealerSumPoints
+      return this.checkingPoints(this.dealerSumPoints, this.countAcePlayer)
     },
 
     setWinner() {
@@ -95,13 +97,17 @@ export default {
   },
   methods: {
     //считаем очки игрока с учетом тузов
-    checkingPointsPlayer(num, numAce){
-      // while (num > 21 && numAce > 0) {
-      //   num -= 10
-      //   numAce -= 1
-      // }
-      this.playerSumPoints = num
-      return num
+    checkingPoints(num, numAce){
+      while (num > 21 && numAce > 0) {
+        num -= 10
+        numAce -= 1
+      }
+      if(this.whoMoveGame === 'player') {
+       return this.playerSumPoints = num
+      } else {
+       return this.dealerSumPoints = num
+      }
+
     },
     //считаем очки dealer с учетом тузов
     checkingPointsDealer(num, numAce){
@@ -109,8 +115,8 @@ export default {
       //   num -= 10
       //   numAce -= 1
       // }
-      this.dealerSumPoints = num
-      return num
+      //this.dealerSumPoints = num
+      //return num
     },
     // устанавливаем в Data победителя с Black Jack
    async setBlackJackData(num, who) {
@@ -150,7 +156,7 @@ export default {
       //  return  this.checkingPointsPlayer(fullPoints, this.countAcePlayer)
       // }
 
-     return fullPoints  // дописать return в IF выше !!!
+     return fullPoints
     },
 
     // проверяем номинал карт
@@ -174,6 +180,12 @@ export default {
         }
       }
       return value
+    },
+    changeGamer(e) {
+      console.log('EVENT', e)
+      this.whoMoveGame = e
+      console.log('THIS', this.whoMoveGame)
+
     }
   }
 }
