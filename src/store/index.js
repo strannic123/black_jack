@@ -16,21 +16,27 @@ export default new Vuex.Store({
                 "value": "KING",
                 "suit": "DIAMONDS"
             },
-            {
-                "code": "7H",
-                "image": "https://deckofcardsapi.com/static/img/7H.png",
-                "value": "7",
-                "suit": "HEARTS"
-            }
+            // {
+            //     "code": "7H",
+            //     "image": "https://deckofcardsapi.com/static/img/7H.png",
+            //     "value": "7",
+            //     "suit": "HEARTS"
+            // },
+            // {
+            //     "code": "AH",
+            //     "image": "https://deckofcardsapi.com/static/img/AH.png",
+            //     "value": "ACE",
+            //     "suit": "HEARTS"
+            // }
         ],
         playerCards: [
-            {
-                "code": "JD",
-                "image": "https://deckofcardsapi.com/static/img/JD.png",
-                "value": "JACK",
-                "suit": "DIAMONDS"
-            },
-            {
+            // {
+            //     "code": "JD",
+            //     "image": "https://deckofcardsapi.com/static/img/JD.png",
+            //     "value": "JACK",
+            //     "suit": "DIAMONDS"
+            // },
+             {
                 "code": "7H",
                 "image": "https://deckofcardsapi.com/static/img/7H.png",
                 "value": "7",
@@ -41,7 +47,19 @@ export default new Vuex.Store({
                 "image": "https://deckofcardsapi.com/static/img/AH.png",
                 "value": "ACE",
                 "suit": "HEARTS"
-            }
+            },
+            // {
+            //     "code": "JD",
+            //     "image": "https://deckofcardsapi.com/static/img/JD.png",
+            //     "value": "JACK",
+            //     "suit": "DIAMONDS"
+            // },
+            // {
+            //     "code": "JD",
+            //     "image": "https://deckofcardsapi.com/static/img/JD.png",
+            //     "value": "JACK",
+            //     "suit": "DIAMONDS"
+            // },
         ],
 
 
@@ -106,8 +124,6 @@ export default new Vuex.Store({
             }
 
         }
-
-
     }
 
 })

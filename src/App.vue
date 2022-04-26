@@ -4,17 +4,26 @@
       <h1 class="header">Black Jack</h1>
       <div class="gameField">
         <div class="dealer">
-          <h3 class="points">Очки дилера: {{dealerBlackJack ? 'Black JACK' : checkNewCardDealer}}</h3>
+          <h3 class="points">Очки дилера: {{dealerBlackJack ? 'Black JACK' : checkNewCardDealer }}</h3>
           <Card :cards="getDealerCards"/>
         </div>
 
         <div class="player">
-          <h3 class="points">Очки игрока: {{playerBlackJack ? 'Black JACK' : checkNewCardPlayer}}</h3>
+          <h3 class="points">Очки игрока: {{playerBlackJack ? 'Black JACK' : checkNewCardPlayer }}</h3>
           <Card :cards="getPlayerCards"/>
         </div>
         <div class="buttons">
-          <Button @toggleGamer="changeGamer " :title="'STAY'"/>
-          <Button :title="'HIT'"/>
+          <Button
+              @dealerCardSet="setCardDealer"
+              @toggleGamer="changeGamer "
+              :title="'STAY'"
+          />
+          <Button
+              @checkingCardToAce="resetSumAce"
+              :disabled="playerSumPoints > 21"
+              :title="'HIT'"
+          />
+
         </div>
       </div>
 
@@ -36,6 +45,8 @@ export default {
       nameDeckValue: ['JACK', 'QUEEN', 'KING', 'ACE'],
       playerSumPoints: 0,
       dealerSumPoints: 0,
+      newPlayerSumPoints: 0,
+      newDealerSumPoints: 0,
       countAcePlayer: 0,
       countAceDealer: 0,
       playerBlackJack: false,
@@ -50,35 +61,28 @@ export default {
   },
   computed: {
     ...mapGetters([
-       'getFullDeck',
-       'getDeckIdForSet',
+      'getFullDeck',
+      'getDeckIdForSet',
       'getDeckId',
       'getDealerCards',
       'getPlayerCards',
     ]),
 
-    checkNewCardDealer() {
-      this.playerSumPoints =  this.sumPoints(this.askBlackJack(
-          this.getDealerCards, 'dealer'), 'dealer')
-      return this.playerSumPoints
-    },
     checkNewCardPlayer() {
-      this.dealerSumPoints = this.sumPoints(
+      this.playerSumPoints = this.sumPoints(
           this.askBlackJack(this.getPlayerCards, 'player'), 'player')
-      return this.checkingPoints(this.dealerSumPoints, this.countAcePlayer)
+      // return this.checkingPoints(this.playerSumPoints, this.countAcePlayer)
+
+      return this.playerSumPoints = this.checkingPoints(this.playerSumPoints, this.countAcePlayer)
     },
 
-    setWinner() {
-      if(this.dealerBlackJack) {
-        this.winner = 'dealer'
-      }
-      if(this.playerBlackJack) {
-        this.winner = 'player'
-      }
-      if(this.playerSumPoints > 21) {
-        this.winner = 'dealer'
-      }
-    }
+    checkNewCardDealer() {
+      this.dealerSumPoints = this.sumPoints(
+          this.askBlackJack(this.getDealerCards, 'dealer'), 'dealer')
+
+      // return this.checkingPoints(this.dealerSumPoints, this.countAceDealer)
+      return this.dealerSumPoints = this.checkingPoints(this.dealerSumPoints, this.countAceDealer)
+    },
 
 
 
@@ -95,99 +99,140 @@ export default {
   mounted() {
 
   },
-  methods: {
-    //считаем очки игрока с учетом тузов
-    checkingPoints(num, numAce){
-      while (num > 21 && numAce > 0) {
-        num -= 10
-        numAce -= 1
-      }
-      if(this.whoMoveGame === 'player') {
-       return this.playerSumPoints = num
-      } else {
-       return this.dealerSumPoints = num
-      }
+    methods: {
+      async setCardDealer() {
+          await this.$store.dispatch('getNextCard', 'STAY')
+        if(this.dealerSumPoints < 17) {
+         await this.setCardDealer()
+        }
 
-    },
-    //считаем очки dealer с учетом тузов
-    checkingPointsDealer(num, numAce){
-      // while (num > 17 && numAce > 0) {
-      //   num -= 10
-      //   numAce -= 1
-      // }
-      //this.dealerSumPoints = num
-      //return num
-    },
-    // устанавливаем в Data победителя с Black Jack
-   async setBlackJackData(num, who) {
-        if(who === 'dealer') {
+
+      },
+      resetSumAce() {
+        console.log('reset_COUNT_ACE')
+        this.countAcePlayer = 0
+        this.checkingPoints(this.playerSumPoints, this.countAcePlayer)
+        this.setWinner()
+      },
+      //считаем очки игрока с учетом тузов
+      checkingPoints(num, numAce) {
+        console.log('num', num)
+        console.log('numAce', numAce)
+        while (num > 21 && numAce > 0) { // проблема
+          num -= 10
+          numAce -= 1
+        }
+        if (this.whoMoveGame === 'player') {
+          this.newPlayerSumPoints = num
+          return num
+        }
+        if (this.whoMoveGame === 'dealer') {
+          this.newDealerSumPoints = num
+          return num
+        }
+
+      },
+
+      // устанавливаем в Data победителя с Black Jack
+      async setBlackJackData(num, who) {
+        if (who === 'dealer') {
           this.dealerBlackJack = true
         } else {
           this.playerBlackJack = true
         }
-     await this.setWinner
+        await this.setWinner
 
-    },
-    // проверка на Black Jack с раздачи
-    askBlackJack(arr, who) {
-      if(arr.length === 2) {
-        let blackJack = 0
+      },
+      // проверка на Black Jack с раздачи
+      askBlackJack(arr, who) {
+        if (arr.length === 2) {
+          let blackJack = 0
+          arr.forEach(card => {
+            blackJack += this.getValueCard(card)
+          })
+          if (blackJack === 21) {
+            this.setBlackJackData(blackJack, who)
+          }
+        }
+        return arr
+
+      },
+      // считаем сумму очков
+      sumPoints(arr, who) {
+        console.log('sumPoints')
+        let fullPoints = 0
         arr.forEach(card => {
-          blackJack += this.getValueCard(card)
+          console.log('card', card)
+          fullPoints += this.countAceCards(this.getValueCard(card), who)
+
         })
-        if(blackJack === 21) {
-          this.setBlackJackData(blackJack, who)
-        }
-      }
-      return arr
+        // if (who === 'dealer') {
+        //   return this.checkingPointsDealer(fullPoints, this.countAceDealer)
+        // }
+        // if (who === 'player') {
+        //   return this.checkingPointsPlayer(fullPoints, this.countAcePlayer)
+        // }
 
-    },
-    // считаем сумму очков
-    sumPoints(arr, who) {
-      let fullPoints = 0
-      arr.forEach(card => {
-        fullPoints  += this.countAceCards(this.getValueCard(card, who))
+        return fullPoints
+      },
 
-      })
-      // if(who === 'dealer') {
-      //   return this.checkingPointsDealer(fullPoints, this.countAceDealer)
-      // }
-      // if(who === 'player') {
-      //  return  this.checkingPointsPlayer(fullPoints, this.countAcePlayer)
-      // }
-
-     return fullPoints
-    },
-
-    // проверяем номинал карт
-    getValueCard(card) {
-      if(isNaN(card.value) && card.value !== 'ACE') {
-        return 10
-      } else if(card.value === 'ACE') {
-        return 11
-      } else {
-        return +card.value
-      }
-    },
-
-    // считаем все карты
-    countAceCards(value, who) {
-      if(value === 11) {
-        if(who === 'dealer') {
-          this.countAceDealer += 1
+      // проверяем номинал карт
+      getValueCard(card) {
+        if (isNaN(card.value) && card.value !== 'ACE') {
+          return 10
+        } else if (card.value === 'ACE') {
+          return 11
         } else {
-          this.countAcePlayer += 1
+          return +card.value
+        }
+      },
+
+      // считаем все Тузы
+      countAceCards(value, who) {
+        if (value === 11) {
+          if (who === 'dealer') {
+            this.countAceDealer += 1
+          }
+          if(who === 'player') {
+            this.countAcePlayer += 1
+          }
+        }
+        return value
+      },
+      changeGamer(e) {
+        console.log('EVENT', e)
+        this.whoMoveGame = e
+        console.log('THIS', this.whoMoveGame)
+
+      },
+      // устанавливаем победителя
+      setWinner() {
+        if (this.dealerBlackJack) {
+          this.winner = 'dealer'
+        }
+        if (this.playerBlackJack) {
+          this.winner = 'player'
+        }
+        if(this.whoMoveGame === 'player') {
+          if (this.newPlayerSumPoints > 21) {
+            this.winner = 'dealer'
+          }
+        }
+        if(this.whoMoveGame === 'dealer') {
+
+          if(this.newDealerSumPoints > this.newPlayerSumPoints) {
+            this.winner = 'dealer'
+          }
+          if(this.newDealerSumPoints < this.newPlayerSumPoints) {
+            this.winner = 'player'
+          }
+          if(this.newDealerSumPoints === this.newPlayerSumPoints) {
+            this.winner = 'stay'
+          }
         }
       }
-      return value
-    },
-    changeGamer(e) {
-      console.log('EVENT', e)
-      this.whoMoveGame = e
-      console.log('THIS', this.whoMoveGame)
-
     }
-  }
+
 }
 </script>
 
