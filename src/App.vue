@@ -8,6 +8,13 @@
           <Card :cards="getDealerCards"/>
         </div>
 
+        <Message>
+          <h3 v-if="winner === 'player'" class="player_win">Вы выиграли - поздравляем</h3>
+          <h3 v-if="winner === 'dealer'" class="dealer_win">Вы проиграли</h3>
+          <h3 v-if="winner === 'stay'" class="stay_no-win">Ничья</h3>
+        </Message>
+
+
         <div class="player">
           <h3 class="points">Очки игрока: {{playerBlackJack ? 'Black JACK' : checkNewCardPlayer }}</h3>
           <Card :cards="getPlayerCards"/>
@@ -16,11 +23,12 @@
           <Button
               @dealerCardSet="setCardDealer"
               @toggleGamer="changeGamer "
+              :disabled="whoMoveGame === 'dealer'"
               :title="'STAY'"
           />
           <Button
               @checkingCardToAce="resetSumAce"
-              :disabled="playerSumPoints > 21"
+              :disabled="playerSumPoints > 21 || whoMoveGame === 'dealer'"
               :title="'HIT'"
           />
 
@@ -35,6 +43,7 @@
 import Card from "./components/Card";
 import {mapGetters} from 'vuex'
 import Button from "./components/Button";
+import Message from "./components/Message";
 
 
 export default {
@@ -57,7 +66,8 @@ export default {
   },
   components: {
     Card,
-    Button
+    Button,
+    Message
   },
   computed: {
     ...mapGetters([
@@ -92,7 +102,7 @@ export default {
   async created() {
     await this.$store.dispatch('fullDeckCard')
     await this.$store.dispatch('saveIdDeck')
-    // await this.$store.dispatch('getFirstThreeCardForStart')
+    await this.$store.dispatch('getFirstThreeCardForStart')
 
 
   },
@@ -111,8 +121,8 @@ export default {
       resetSumAce() {
         console.log('reset_COUNT_ACE')
         this.countAcePlayer = 0
-        this.checkingPoints(this.playerSumPoints, this.countAcePlayer)
-        this.setWinner()
+        // this.checkingPoints(this.playerSumPoints, this.countAcePlayer)
+        // this.setWinner()
       },
       //считаем очки игрока с учетом тузов
       checkingPoints(num, numAce) {

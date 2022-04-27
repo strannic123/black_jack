@@ -10,12 +10,12 @@ export default new Vuex.Store({
         fullDesc: [],
         deckId: '',
         dealerCards: [
-            {
-                "code": "KD",
-                "image": "https://deckofcardsapi.com/static/img/KD.png",
-                "value": "KING",
-                "suit": "DIAMONDS"
-            },
+            // {
+            //     "code": "KD",
+            //     "image": "https://deckofcardsapi.com/static/img/KD.png",
+            //     "value": "KING",
+            //     "suit": "DIAMONDS"
+            // },
             // {
             //     "code": "7H",
             //     "image": "https://deckofcardsapi.com/static/img/7H.png",
@@ -36,18 +36,18 @@ export default new Vuex.Store({
             //     "value": "JACK",
             //     "suit": "DIAMONDS"
             // },
-             {
-                "code": "7H",
-                "image": "https://deckofcardsapi.com/static/img/7H.png",
-                "value": "7",
-                "suit": "HEARTS"
-            },
-            {
-                "code": "AH",
-                "image": "https://deckofcardsapi.com/static/img/AH.png",
-                "value": "ACE",
-                "suit": "HEARTS"
-            },
+            //  {
+            //     "code": "7H",
+            //     "image": "https://deckofcardsapi.com/static/img/7H.png",
+            //     "value": "7",
+            //     "suit": "HEARTS"
+            // },
+            // {
+            //     "code": "AH",
+            //     "image": "https://deckofcardsapi.com/static/img/AH.png",
+            //     "value": "ACE",
+            //     "suit": "HEARTS"
+            // },
             // {
             //     "code": "JD",
             //     "image": "https://deckofcardsapi.com/static/img/JD.png",
