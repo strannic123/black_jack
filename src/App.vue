@@ -151,18 +151,10 @@ export default {
     checkingPoints(num, numAce) {
       console.log('num', num)
       console.log('numAce', numAce)
-      while (num > 21 && numAce > 0) { // проблема
+      while (num > 21 && numAce > 0) {
         num -= 10
         numAce -= 1
       }
-      // if (this.whoMoveGame === 'player') {
-      //   this.newPlayerSumPoints = num
-      //   return num
-      // }
-      // if (this.whoMoveGame === 'dealer') {
-      //   this.newDealerSumPoints = num
-      //   return num
-      // }
       if (this.whoMoveGame === 'player') {
         this.playerSumPoints = num
         this.resetSumAce()
