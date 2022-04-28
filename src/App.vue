@@ -21,6 +21,11 @@
         </div>
         <div class="buttons">
           <Button
+              :title="'new game'"
+              @startNewGame="startNewGame()"
+              :disabled="disabledBtnNewGame()"
+          />
+          <Button
               @dealerCardSet="setCardDealer"
               @toggleGamer="changeGamer "
               :disabled="disabledBtnStay()"
@@ -52,7 +57,7 @@ export default {
   name: 'App',
   data() {
     return {
-      firstTreeCard: false,
+      //firstTreeCard: false,
       nameDeckValue: ['JACK', 'QUEEN', 'KING', 'ACE'],
       playerSumPoints: 0,
       dealerSumPoints: 0,
@@ -288,6 +293,20 @@ export default {
     disabledBtnHit() {
       return this.playerSumPoints >= 21 || this.whoMoveGame === 'dealer' || this.playerBlackJack
     },
+    disabledBtnNewGame() {
+      return this.winner === 'no-winner'
+    },
+    async startNewGame() {
+      this.playerSumPoints= 0
+      this.dealerSumPoints= 0
+      this.countAcePlayer= 0
+      this.countAceDealer= 0
+      this.playerBlackJack= false
+      this.dealerBlackJack= false
+      this.whoMoveGame= 'player'
+      this.winner= 'no-winner'
+     await this.$store.dispatch('getFirstThreeCardForStart')
+    }
   }
 
 }

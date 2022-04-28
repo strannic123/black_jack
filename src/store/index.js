@@ -108,7 +108,15 @@ export default new Vuex.Store({
         },
         SET_CARD_PLAYER(state, card) {
             state.playerCards.push(card)
+        },
+        SET_RESET_DEALER_CARD(state) {
+            state.dealerCards = []
+        },
+        SET_RESET_PLAYER_CARD(state) {
+            state.playerCards = []
         }
+
+
     },
     actions: {
         async fullDeckCard({commit}) {
@@ -124,6 +132,8 @@ export default new Vuex.Store({
             }
         },
         async getFirstThreeCardForStart({commit}) {
+            commit('SET_RESET_DEALER_CARD')
+            commit('SET_RESET_PLAYER_CARD')
             const {cards} = await getFirstThreeCard()
             console.log('FIRST_THREE', cards)
             commit('SET_CARD_PLAYER', cards[0])

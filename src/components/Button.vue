@@ -2,7 +2,7 @@
   <button
       :key="title"
       class="btn"
-      @click="nextCard(title)"
+      @click="gameControl(title)"
   >{{title}}</button>
 
 </template>
@@ -17,15 +17,17 @@ export default {
 
   },
   methods: {
-   async nextCard(key) {
+   async gameControl(key) {
       if(key === 'HIT') {
-        // await this.$store.dispatch('getNextCard', key)
         await this.$emit('nextCardPlayer')
         this.$emit('checkingCardToAce')
       }
       if(key === 'STAY') {
         this.$emit('toggleGamer', 'dealer')
         this.$emit('dealerCardSet')
+      }
+      if(key === 'new game') {
+        this.$emit('startNewGame')
       }
     },
 
