@@ -28,12 +28,12 @@ export default new Vuex.Store({
             //     "value": "7",
             //     "suit": "HEARTS"
             // },
-            {
-                "code": "AH",
-                "image": "https://deckofcardsapi.com/static/img/AH.png",
-                "value": "ACE",
-                "suit": "HEARTS"
-            }
+            // {
+            //     "code": "AH",
+            //     "image": "https://deckofcardsapi.com/static/img/AH.png",
+            //     "value": "ACE",
+            //     "suit": "HEARTS"
+            // }
         ],
         playerCards: [
             // {
@@ -42,18 +42,18 @@ export default new Vuex.Store({
             //     "value": "JACK",
             //     "suit": "DIAMONDS"
             // },
-             {
-                "code": "8H",
-                "image": "https://deckofcardsapi.com/static/img/8H.png",
-                "value": "8",
-                "suit": "HEARTS"
-            },
-            {
-                "code": "AH",
-                "image": "https://deckofcardsapi.com/static/img/AH.png",
-                "value": "ACE",
-                "suit": "HEARTS"
-            },
+            //  {
+            //     "code": "8H",
+            //     "image": "https://deckofcardsapi.com/static/img/8H.png",
+            //     "value": "8",
+            //     "suit": "HEARTS"
+            // },
+            // {
+            //     "code": "AH",
+            //     "image": "https://deckofcardsapi.com/static/img/AH.png",
+            //     "value": "ACE",
+            //     "suit": "HEARTS"
+            // },
             // {
             //     "code": "4H",
             //     "image": "https://deckofcardsapi.com/static/img/4H.png",

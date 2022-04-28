@@ -23,13 +23,13 @@
           <Button
               @dealerCardSet="setCardDealer"
               @toggleGamer="changeGamer "
-              :disabled="whoMoveGame === 'dealer' || playerSumPoints > 21 || playerBlackJack && (dealerSumPoints !== 10 || dealerSumPoints !== 11)"
+              :disabled="disabledBtnStay()"
               :title="'STAY'"
           />
           <Button
               @checkingCardToAce="resetSumAce"
               @nextCardPlayer="nextCardPlayer"
-              :disabled="playerSumPoints >= 21 || whoMoveGame === 'dealer' || playerBlackJack"
+              :disabled="disabledBtnHit()"
               :title="'HIT'"
           />
 
@@ -56,14 +56,12 @@ export default {
       nameDeckValue: ['JACK', 'QUEEN', 'KING', 'ACE'],
       playerSumPoints: 0,
       dealerSumPoints: 0,
-      // newPlayerSumPoints: 0,
-      // newDealerSumPoints: 0,
       countAcePlayer: 0,
       countAceDealer: 0,
       playerBlackJack: false,
       dealerBlackJack: false,
       whoMoveGame: 'player', // кто играет
-      winner: 'no-winner'
+      winner: 'no-winner'  // определен победитель
     }
   },
   components: {
@@ -79,7 +77,6 @@ export default {
       'getDealerCards',
       'getPlayerCards',
     ]),
-// Поставить условие на того кто играет
 
     checkNewCardPlayer() {
         this.playerSumPoints = this.sumPoints(
@@ -105,7 +102,7 @@ export default {
   async created() {
     await this.$store.dispatch('fullDeckCard')
     await this.$store.dispatch('saveIdDeck')
-    // await this.$store.dispatch('getFirstThreeCardForStart')
+    await this.$store.dispatch('getFirstThreeCardForStart')
 
 
   },
@@ -262,34 +259,43 @@ export default {
       if (this.dealerBlackJack && !this.playerBlackJack) {
         this.winner = 'dealer'
       }
+
       if (this.playerBlackJack && this.countAceDealer === 0 && this.dealerSumPoints !== 10) {
         this.winner = 'player'
       }
-      // if (this.whoMoveGame === 'player') {
-      //   if (this.playerSumPoints > 21) {
-      //     this.winner = 'dealer'
-      //   }
-      // }
+
       if (this.whoMoveGame === 'dealer') {
+
         if(!this.checkDealerPointFromToAnd() && this.dealerSumPoints > this.playerSumPoints) {
           this.winner = 'player'
         }
+
         if (this.checkDealerPointFromToAnd() && this.dealerSumPoints > this.playerSumPoints) {
           this.winner = 'dealer'
         }
+
         if (this.checkDealerPointFromToAnd() && this.dealerSumPoints < this.playerSumPoints) {
           this.winner = 'player'
         }
+
         if (this.checkDealerPointFromToAnd() && this.dealerSumPoints === this.playerSumPoints) {
           this.winner = 'stay'
         }
       }
+
       if (this.whoMoveGame === 'player') {
         if (this.playerSumPoints > 21) {
           this.winner = 'dealer'
         }
       }
-    }
+    },
+
+    disabledBtnStay() {
+      return this.whoMoveGame === 'dealer' || this.playerSumPoints > 21 || this.playerBlackJack && (this.dealerSumPoints !== 10 || this.dealerSumPoints !== 11)
+    },
+    disabledBtnHit() {
+      return this.playerSumPoints >= 21 || this.whoMoveGame === 'dealer' || this.playerBlackJack
+    },
   }
 
 }
