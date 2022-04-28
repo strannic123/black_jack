@@ -13,11 +13,11 @@ export default {
 
 <style scoped>
 .player_win{
-  color: green;
+  color: #90eb34;
   font-size: 30px;
 }
 .dealer_win{
-  color: red;
+  color: #ff9214;
   font-size: 30px;
 }
 .stay_no-win{

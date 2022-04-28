@@ -19,7 +19,8 @@ export default {
   methods: {
    async nextCard(key) {
       if(key === 'HIT') {
-        await this.$store.dispatch('getNextCard', key)
+        // await this.$store.dispatch('getNextCard', key)
+        await this.$emit('nextCardPlayer')
         this.$emit('checkingCardToAce')
       }
       if(key === 'STAY') {

@@ -5,6 +5,12 @@ import {getApiDesc, getFirstThreeCard, getNextCard} from "../api/fullDeckCard";
 
 Vue.use(Vuex)
 
+
+// TODO переделать на функции две кнопки для disabled
+
+
+
+
 export default new Vuex.Store({
     state: {
         fullDesc: [],
@@ -22,12 +28,12 @@ export default new Vuex.Store({
             //     "value": "7",
             //     "suit": "HEARTS"
             // },
-            // {
-            //     "code": "AH",
-            //     "image": "https://deckofcardsapi.com/static/img/AH.png",
-            //     "value": "ACE",
-            //     "suit": "HEARTS"
-            // }
+            {
+                "code": "AH",
+                "image": "https://deckofcardsapi.com/static/img/AH.png",
+                "value": "ACE",
+                "suit": "HEARTS"
+            }
         ],
         playerCards: [
             // {
@@ -36,16 +42,22 @@ export default new Vuex.Store({
             //     "value": "JACK",
             //     "suit": "DIAMONDS"
             // },
-            //  {
-            //     "code": "7H",
-            //     "image": "https://deckofcardsapi.com/static/img/7H.png",
-            //     "value": "7",
-            //     "suit": "HEARTS"
-            // },
+             {
+                "code": "8H",
+                "image": "https://deckofcardsapi.com/static/img/8H.png",
+                "value": "8",
+                "suit": "HEARTS"
+            },
+            {
+                "code": "AH",
+                "image": "https://deckofcardsapi.com/static/img/AH.png",
+                "value": "ACE",
+                "suit": "HEARTS"
+            },
             // {
-            //     "code": "AH",
-            //     "image": "https://deckofcardsapi.com/static/img/AH.png",
-            //     "value": "ACE",
+            //     "code": "4H",
+            //     "image": "https://deckofcardsapi.com/static/img/4H.png",
+            //     "value": "4",
             //     "suit": "HEARTS"
             // },
             // {
@@ -53,6 +65,13 @@ export default new Vuex.Store({
             //     "image": "https://deckofcardsapi.com/static/img/JD.png",
             //     "value": "JACK",
             //     "suit": "DIAMONDS"
+            // },
+            //
+            // {
+            //     "code": "8H",
+            //     "image": "https://deckofcardsapi.com/static/img/8H.png",
+            //     "value": "8",
+            //     "suit": "HEARTS"
             // },
             // {
             //     "code": "JD",
