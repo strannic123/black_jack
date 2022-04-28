@@ -339,6 +339,13 @@ export default {
   flex: 1 1 auto;
 }
 
+.header {
+  margin-top: 36px;
+  font-size: 56px;
+  color: aquamarine;
+  font-weight: bold;
+}
+
 .dealer,
 .player {
 

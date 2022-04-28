@@ -5,10 +5,7 @@ import {getApiDesc, getFirstThreeCard, getNextCard} from "../api/fullDeckCard";
 
 Vue.use(Vuex)
 
-
-// TODO переделать на функции две кнопки для disabled
-
-
+// TODO сделать счет на деньги
 
 
 export default new Vuex.Store({
@@ -80,8 +77,6 @@ export default new Vuex.Store({
             //     "suit": "DIAMONDS"
             // },
         ],
-
-
     },
     getters: {
         getFullDeck: state => state.fullDesc,
