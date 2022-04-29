@@ -13,31 +13,40 @@
           <h3 v-if="winner === 'dealer'" class="dealer_win">Вы проиграли</h3>
           <h3 v-if="winner === 'stay'" class="stay_no-win">Ничья</h3>
         </Message>
+        <div class="bet">
+          <span class="bet_title">Ставка</span><span class="bet_num"> $ 10</span>
+        </div>
 
 
         <div class="player">
           <h3 class="points">Очки игрока: {{ playerBlackJack ? 'Black JACK' : checkNewCardPlayer }}</h3>
           <Card :cards="getPlayerCards"/>
         </div>
-        <div class="buttons">
-          <Button
-              :title="'new game'"
-              @startNewGame="startNewGame()"
-              :disabled="disabledBtnNewGame()"
-          />
-          <Button
-              @dealerCardSet="setCardDealer"
-              @toggleGamer="changeGamer "
-              :disabled="disabledBtnStay()"
-              :title="'STAY'"
-          />
-          <Button
-              @checkingCardToAce="resetSumAce"
-              @nextCardPlayer="nextCardPlayer"
-              :disabled="disabledBtnHit()"
-              :title="'HIT'"
-          />
+        <div class="control">
+          <div class="bank">
+            <p class="bank_title">Деньги игрока</p>
+            <span class="bank_num">$ 1000</span>
+          </div>
 
+          <div class="buttons">
+            <Button
+                :title="'new game'"
+                @startNewGame="startNewGame()"
+                :disabled="disabledBtnNewGame()"
+            />
+            <Button
+                @dealerCardSet="setCardDealer"
+                @toggleGamer="changeGamer "
+                :disabled="disabledBtnStay()"
+                :title="'STAY'"
+            />
+            <Button
+                @checkingCardToAce="resetSumAce"
+                @nextCardPlayer="nextCardPlayer"
+                :disabled="disabledBtnHit()"
+                :title="'HIT'"
+            />
+          </div>
 
         </div>
       </div>
@@ -84,13 +93,13 @@ export default {
     ]),
 
     checkNewCardPlayer() {
-        this.playerSumPoints = this.sumPoints(
-            this.askBlackJack(this.getPlayerCards, 'player'), 'player')
+      this.playerSumPoints = this.sumPoints(
+          this.askBlackJack(this.getPlayerCards, 'player'), 'player')
 
-        // return this.playerSumPoints = this.checkingPoints(this.playerSumPoints, this.countAcePlayer)
-        this.playerSumPoints = this.checkingPoints(this.playerSumPoints, this.countAcePlayer)
-        // this.setWinner()
-        return this.playerSumPoints
+      // return this.playerSumPoints = this.checkingPoints(this.playerSumPoints, this.countAcePlayer)
+      this.playerSumPoints = this.checkingPoints(this.playerSumPoints, this.countAcePlayer)
+      // this.setWinner()
+      return this.playerSumPoints
     },
 
     checkNewCardDealer() {
@@ -117,7 +126,7 @@ export default {
   methods: {
     // авто набор дилера
     async setCardDealer() {
-      if(this.playerBlackJack && (this.countAceDealer > 0 || this.dealerSumPoints === 10)) {
+      if (this.playerBlackJack && (this.countAceDealer > 0 || this.dealerSumPoints === 10)) {
         await this.$store.dispatch('getNextCard', 'STAY')
         this.setWinner()
         return
@@ -137,7 +146,7 @@ export default {
 
     // следующая карта игрока по клику
     async nextCardPlayer() {
-      if(!this.playerBlackJack ) {
+      if (!this.playerBlackJack) {
         this.resetSumAce()
         await this.$store.dispatch('getNextCard', 'HIT')
         console.log('сработала проверка!!')
@@ -263,7 +272,7 @@ export default {
 
       if (this.whoMoveGame === 'dealer') {
 
-        if(!this.checkDealerPointFromToAnd() && this.dealerSumPoints > this.playerSumPoints) {
+        if (!this.checkDealerPointFromToAnd() && this.dealerSumPoints > this.playerSumPoints) {
           this.winner = 'player'
         }
 
@@ -297,15 +306,15 @@ export default {
       return this.winner === 'no-winner'
     },
     async startNewGame() {
-      this.playerSumPoints= 0
-      this.dealerSumPoints= 0
-      this.countAcePlayer= 0
-      this.countAceDealer= 0
-      this.playerBlackJack= false
-      this.dealerBlackJack= false
-      this.whoMoveGame= 'player'
-      this.winner= 'no-winner'
-     await this.$store.dispatch('getFirstThreeCardForStart')
+      this.playerSumPoints = 0
+      this.dealerSumPoints = 0
+      this.countAcePlayer = 0
+      this.countAceDealer = 0
+      this.playerBlackJack = false
+      this.dealerBlackJack = false
+      this.whoMoveGame = 'player'
+      this.winner = 'no-winner'
+      await this.$store.dispatch('getFirstThreeCardForStart')
     }
   }
 
@@ -346,6 +355,18 @@ export default {
   font-weight: bold;
 }
 
+.bet_title {
+  font-size: 30px;
+  font-weight: bold;
+  color: #F7A740;
+}
+
+.bet_num {
+  font-weight: bold;
+  font-size: 28px;
+  color: gold;
+}
+
 .dealer,
 .player {
 
@@ -355,5 +376,27 @@ export default {
   color: yellow;
   font-size: 32px;
   margin-bottom: 20px;
+}
+
+.control {
+  display: flex;
+  align-items: center;
+
+}
+
+.bank_title {
+  font-size: 26px;
+  color: #00ff4a;
+  font-weight: bold;
+  margin-right: 30px;
+}
+
+.bank_num {
+  display: block;
+  font-size: 30px;
+  font-weight: bold;
+  color: gold;
+  padding-top: 10px;
+
 }
 </style>
