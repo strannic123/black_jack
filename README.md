@@ -1,4 +1,10 @@
-# black_jack
+
+#  Black Jack (Vue)
+
+## Полноценный вариант игры в Black Jack
+
+## ![Imgur](https://i.imgur.com/plbf44x.gif)
+
 
 ## Project setup
 ```
