@@ -4,8 +4,6 @@
       <img :src="`${card.image}`" :alt="`${card.value } ${card.suit}`">
 
     </div>
-
-
   </div>
 
 </template>

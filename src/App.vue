@@ -9,7 +9,8 @@
         </div>
 
         <Message>
-          <h3 v-if="winner === 'player'" class="player_win">Вы выиграли <span> $ {{winPayDollar}}</span> - поздравляем</h3>
+          <h3 v-if="winner === 'player'" class="player_win">Вы выиграли <span> $ {{ winPayDollar }}</span> - поздравляем
+          </h3>
           <h3 v-if="winner === 'dealer'" class="dealer_win">Вы проиграли </h3>
           <h3 v-if="winner === 'stay'" class="stay_no-win">Ничья</h3>
         </Message>
@@ -25,7 +26,7 @@
         <div class="control">
           <div class="bank">
             <p class="bank_title">Деньги игрока</p>
-            <span class="bank_num">$ {{getPlayerBank}}</span>
+            <span class="bank_num">$ {{ getPlayerBank }}</span>
           </div>
 
           <div class="buttons">
@@ -66,7 +67,6 @@ export default {
   name: 'App',
   data() {
     return {
-      //firstTreeCard: false,
       nameDeckValue: ['JACK', 'QUEEN', 'KING', 'ACE'],
       playerSumPoints: 0,
       dealerSumPoints: 0,
@@ -87,7 +87,6 @@ export default {
   },
   watch: {
     winner(newVal) {
-      console.log('WATCH VALUE', newVal)
       this.checkBankPlayer(newVal)
     }
   },
@@ -104,20 +103,14 @@ export default {
     checkNewCardPlayer() {
       this.playerSumPoints = this.sumPoints(
           this.askBlackJack(this.getPlayerCards, 'player'), 'player')
-
-      // return this.playerSumPoints = this.checkingPoints(this.playerSumPoints, this.countAcePlayer)
       this.playerSumPoints = this.checkingPoints(this.playerSumPoints, this.countAcePlayer)
-      // this.setWinner()
       return this.playerSumPoints
     },
 
     checkNewCardDealer() {
       this.dealerSumPoints = this.sumPoints(
           this.askBlackJack(this.getDealerCards, 'dealer'), 'dealer')
-
-      // return this.dealerSumPoints = this.checkingPoints(this.dealerSumPoints, this.countAceDealer)
       this.dealerSumPoints = this.checkingPoints(this.dealerSumPoints, this.countAceDealer)
-      // this.setWinner()
       return this.dealerSumPoints
     },
 
@@ -126,7 +119,6 @@ export default {
     await this.$store.dispatch('fullDeckCard')
     await this.$store.dispatch('saveIdDeck')
     await this.$store.dispatch('getFirstThreeCardForStart')
-    // await this.$store.dispatch('setBetForGame', this.betPlayer)
 
 
   },
@@ -144,14 +136,10 @@ export default {
 
       await this.$store.dispatch('getNextCard', 'STAY')
 
-
       if (this.dealerSumPoints < 17 && !this.playerBlackJack) {
         await this.setCardDealer()
-
       }
       this.setWinner()
-
-
     },
 
     // следующая карта игрока по клику
@@ -159,22 +147,16 @@ export default {
       if (!this.playerBlackJack) {
         this.resetSumAce()
         await this.$store.dispatch('getNextCard', 'HIT')
-        console.log('сработала проверка!!')
         this.setWinner()
       }
     },
     resetSumAce() {
-      console.log('reset_COUNT_ACE')
       this.countAcePlayer = 0
       this.countAceDealer = 0
-      // this.checkingPoints(this.playerSumPoints, this.countAcePlayer)
-      // this.setWinner()
     },
 
     //считаем очки игрока с учетом тузов
     checkingPoints(num, numAce) {
-      console.log('num', num)
-      console.log('numAce', numAce)
       while (num > 21 && numAce > 0) {
         num -= 10
         numAce -= 1
@@ -218,20 +200,10 @@ export default {
     },
     // считаем сумму очков
     sumPoints(arr, who) {
-      console.log('sumPoints')
       let fullPoints = 0
       arr.forEach(card => {
-        console.log('card', card)
         fullPoints += this.countAceCards(this.getValueCard(card), who)
-
       })
-      // if (who === 'dealer') {
-      //   return this.checkingPointsDealer(fullPoints, this.countAceDealer)
-      // }
-      // if (who === 'player') {
-      //   return this.checkingPointsPlayer(fullPoints, this.countAcePlayer)
-      // }
-
       return fullPoints
     },
 
@@ -259,10 +231,7 @@ export default {
       return value
     },
     changeGamer(e) {
-      // console.log('EVENT', e)
       this.whoMoveGame = e
-      // console.log('THIS', this.whoMoveGame)
-
     },
 
     // проверяем диапазон карт дилера - делаем до сравнения с player
@@ -271,12 +240,12 @@ export default {
     },
 
     // расчет денег по результатам игры
-    checkBankPlayer(who ) {
+    checkBankPlayer(who) {
       let win = this.betPlayer * 2
       let winBj = this.betPlayer * 2.5
 
       if (who === 'player') {
-        if (this.playerBlackJack ) {
+        if (this.playerBlackJack) {
           this.$store.dispatch('setBankWinPlayer', winBj)
           this.winPayDollar = this.betPlayer * 1.5
         } else {
@@ -285,13 +254,9 @@ export default {
         }
       }
 
-      if(who === 'stay') {
-        console.log('APP Ничья')
+      if (who === 'stay') {
         this.$store.dispatch('setBankWinPlayer', this.betPlayer)
       }
-
-
-
     },
 
     // устанавливаем победителя
@@ -299,10 +264,6 @@ export default {
       if (this.dealerBlackJack && !this.playerBlackJack) {
         this.winner = 'dealer'
       }
-
-      // if (this.playerBlackJack && this.countAceDealer === 0 && this.dealerSumPoints !== 10) {
-      //   this.winner = 'player'
-      // }
 
       if (this.playerBlackJack && this.dealerSumPoints !== 11 && this.dealerSumPoints !== 10) {
         this.winner = 'player'
@@ -312,22 +273,18 @@ export default {
 
         if (!this.checkDealerPointFromToAnd() && this.dealerSumPoints > this.playerSumPoints) {
           this.winner = 'player'
-
         }
 
         if (this.checkDealerPointFromToAnd() && this.dealerSumPoints > this.playerSumPoints) {
           this.winner = 'dealer'
-
         }
 
         if (this.checkDealerPointFromToAnd() && this.dealerSumPoints < this.playerSumPoints) {
           this.winner = 'player'
-
         }
 
         if (this.checkDealerPointFromToAnd() && this.dealerSumPoints === this.playerSumPoints) {
           this.winner = 'stay'
-
         }
 
       }
@@ -335,7 +292,6 @@ export default {
       if (this.whoMoveGame === 'player') {
         if (this.playerSumPoints > 21) {
           this.winner = 'dealer'
-
         }
       }
 
@@ -434,7 +390,6 @@ export default {
 .control {
   display: flex;
   align-items: center;
-
 }
 
 .bank_title {

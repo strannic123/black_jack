@@ -3,7 +3,8 @@
       :key="title"
       class="btn"
       @click="gameControl(title)"
-  >{{title}}</button>
+  >{{ title }}
+  </button>
 
 </template>
 
@@ -13,20 +14,18 @@
 export default {
   name: "Button",
   props: ['title'],
-  computed: {
-
-  },
+  computed: {},
   methods: {
-   async gameControl(key) {
-      if(key === 'HIT') {
+    async gameControl(key) {
+      if (key === 'HIT') {
         await this.$emit('nextCardPlayer')
         this.$emit('checkingCardToAce')
       }
-      if(key === 'STAY') {
+      if (key === 'STAY') {
         this.$emit('toggleGamer', 'dealer')
         this.$emit('dealerCardSet')
       }
-      if(key === 'new game') {
+      if (key === 'new game') {
         this.$emit('startNewGame')
       }
     },

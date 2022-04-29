@@ -12,15 +12,17 @@ export default {
 </script>
 
 <style scoped>
-.player_win{
+.player_win {
   color: #90eb34;
   font-size: 30px;
 }
-.dealer_win{
+
+.dealer_win {
   color: #ff9214;
   font-size: 30px;
 }
-.stay_no-win{
+
+.stay_no-win {
   color: #ffbb00;
   font-size: 30px;
 }

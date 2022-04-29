@@ -106,13 +106,10 @@ export default new Vuex.Store({
     mutations: {
         SET_FULL_DESK(state, data) {
             state.fullDesc.push(data)
-            console.log('check')
             state.deckId = state.fullDesc.deckId
-            console.log('final',)
         },
 
         SET_DESK_ID(state, id) {
-            console.log('SET', id)
             state.deckId = id
         },
         SET_CARD_DEALER(state, card) {
@@ -148,7 +145,6 @@ export default new Vuex.Store({
         async saveIdDeck({commit, getters}) {
             if (getters.getFullDeck.length) {
                 let id = await getters.getDeckIdForSet
-                console.log('STATE_ID', id)
                 commit('SET_DESK_ID', id)
             }
         },
@@ -157,7 +153,6 @@ export default new Vuex.Store({
             commit('SET_RESET_PLAYER_CARD')
             const {cards} = await getFirstThreeCard()
             commit('SET_BET_FOR_GAME', 10)
-            console.log('FIRST_THREE', cards)
             commit('SET_CARD_PLAYER', cards[0])
             commit('SET_CARD_DEALER', cards[1])
             commit('SET_CARD_PLAYER', cards[2])
@@ -165,9 +160,6 @@ export default new Vuex.Store({
         },
         async getNextCard({commit}, what) {
             const {cards} = await getNextCard()
-            console.log('VUEX_CHECK')
-            console.log('VUEX_CHECK_VALUE', what)
-            console.log('VUEX_CHECK_VALUE', cards)
             if (what === 'STAY') {
                 commit('SET_CARD_DEALER', cards[0])
             }
@@ -177,15 +169,6 @@ export default new Vuex.Store({
         },
         setBankWinPlayer({commit}, dollar) {
             commit('SET_BANK_WIN_PLAYER', dollar)
-            console.log('store Ничья')
         },
-        // setBankWinDealer({commit}, dollar) { // так же используем для ставки перед раздачей
-        //     commit('SET_BANK_WIN_DEALER', dollar)
-        // },
-        // setBetForGame({commit}, dollar) {
-        //     commit('SET_BET_FOR_GAME', dollar)
-        // }
-
     }
-
 })
