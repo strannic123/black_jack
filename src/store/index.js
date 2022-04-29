@@ -5,14 +5,29 @@ import {getApiDesc, getFirstThreeCard, getNextCard} from "../api/fullDeckCard";
 
 Vue.use(Vuex)
 
-// TODO сделать счет на деньги
-
-
 export default new Vuex.Store({
     state: {
         fullDesc: [],
         deckId: '',
         dealerCards: [
+            // {
+            //     "code": "5H",
+            //     "image": "https://deckofcardsapi.com/static/img/5H.png",
+            //     "value": "5",
+            //     "suit": "HEARTS"
+            // },
+            // {
+            //     "code": "AH",
+            //     "image": "https://deckofcardsapi.com/static/img/AH.png",
+            //     "value": "ACE",
+            //     "suit": "HEARTS"
+            // },
+            // {
+            //     "code": "KD",
+            //     "image": "https://deckofcardsapi.com/static/img/KD.png",
+            //     "value": "KING",
+            //     "suit": "DIAMONDS"
+            // },
             // {
             //     "code": "KD",
             //     "image": "https://deckofcardsapi.com/static/img/KD.png",
@@ -162,10 +177,14 @@ export default new Vuex.Store({
         },
         setBankWinPlayer({commit}, dollar) {
             commit('SET_BANK_WIN_PLAYER', dollar)
+            console.log('store Ничья')
         },
-        setBankWinDealer({commit}, dollar) { // так же используем для ставки перед раздачей
-            commit('SET_BANK_WIN_DEALER', dollar)
-        },
+        // setBankWinDealer({commit}, dollar) { // так же используем для ставки перед раздачей
+        //     commit('SET_BANK_WIN_DEALER', dollar)
+        // },
+        // setBetForGame({commit}, dollar) {
+        //     commit('SET_BET_FOR_GAME', dollar)
+        // }
 
     }
 

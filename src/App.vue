@@ -9,8 +9,8 @@
         </div>
 
         <Message>
-          <h3 v-if="winner === 'player'" class="player_win">Вы выиграли - поздравляем</h3>
-          <h3 v-if="winner === 'dealer'" class="dealer_win">Вы проиграли</h3>
+          <h3 v-if="winner === 'player'" class="player_win">Вы выиграли <span> $ {{winPayDollar}}</span> - поздравляем</h3>
+          <h3 v-if="winner === 'dealer'" class="dealer_win">Вы проиграли </h3>
           <h3 v-if="winner === 'stay'" class="stay_no-win">Ничья</h3>
         </Message>
         <div class="bet">
@@ -75,13 +75,21 @@ export default {
       playerBlackJack: false,
       dealerBlackJack: false,
       whoMoveGame: 'player', // кто играет
-      winner: 'no-winner'  // определен победитель
+      winner: 'no-winner',  // определен победитель
+      betPlayer: 10,
+      winPayDollar: 0
     }
   },
   components: {
     Card,
     Button,
     Message
+  },
+  watch: {
+    winner(newVal) {
+      console.log('WATCH VALUE', newVal)
+      this.checkBankPlayer(newVal)
+    }
   },
   computed: {
     ...mapGetters([
@@ -118,6 +126,7 @@ export default {
     await this.$store.dispatch('fullDeckCard')
     await this.$store.dispatch('saveIdDeck')
     await this.$store.dispatch('getFirstThreeCardForStart')
+    // await this.$store.dispatch('setBetForGame', this.betPlayer)
 
 
   },
@@ -250,9 +259,9 @@ export default {
       return value
     },
     changeGamer(e) {
-      console.log('EVENT', e)
+      // console.log('EVENT', e)
       this.whoMoveGame = e
-      console.log('THIS', this.whoMoveGame)
+      // console.log('THIS', this.whoMoveGame)
 
     },
 
@@ -261,13 +270,41 @@ export default {
       return this.dealerSumPoints >= 17 && this.dealerSumPoints <= 21;
     },
 
+    // расчет денег по результатам игры
+    checkBankPlayer(who ) {
+      let win = this.betPlayer * 2
+      let winBj = this.betPlayer * 2.5
+
+      if (who === 'player') {
+        if (this.playerBlackJack ) {
+          this.$store.dispatch('setBankWinPlayer', winBj)
+          this.winPayDollar = this.betPlayer * 1.5
+        } else {
+          this.$store.dispatch('setBankWinPlayer', win)
+          this.winPayDollar = this.betPlayer
+        }
+      }
+
+      if(who === 'stay') {
+        console.log('APP Ничья')
+        this.$store.dispatch('setBankWinPlayer', this.betPlayer)
+      }
+
+
+
+    },
+
     // устанавливаем победителя
     setWinner() {
       if (this.dealerBlackJack && !this.playerBlackJack) {
         this.winner = 'dealer'
       }
 
-      if (this.playerBlackJack && this.countAceDealer === 0 && this.dealerSumPoints !== 10) {
+      // if (this.playerBlackJack && this.countAceDealer === 0 && this.dealerSumPoints !== 10) {
+      //   this.winner = 'player'
+      // }
+
+      if (this.playerBlackJack && this.dealerSumPoints !== 11 && this.dealerSumPoints !== 10) {
         this.winner = 'player'
       }
 
@@ -275,30 +312,37 @@ export default {
 
         if (!this.checkDealerPointFromToAnd() && this.dealerSumPoints > this.playerSumPoints) {
           this.winner = 'player'
+
         }
 
         if (this.checkDealerPointFromToAnd() && this.dealerSumPoints > this.playerSumPoints) {
           this.winner = 'dealer'
+
         }
 
         if (this.checkDealerPointFromToAnd() && this.dealerSumPoints < this.playerSumPoints) {
           this.winner = 'player'
+
         }
 
         if (this.checkDealerPointFromToAnd() && this.dealerSumPoints === this.playerSumPoints) {
           this.winner = 'stay'
+
         }
+
       }
 
       if (this.whoMoveGame === 'player') {
         if (this.playerSumPoints > 21) {
           this.winner = 'dealer'
+
         }
       }
+
     },
 
     disabledBtnStay() {
-      return this.whoMoveGame === 'dealer' || this.playerSumPoints > 21 || this.playerBlackJack && (this.dealerSumPoints !== 10 || this.dealerSumPoints !== 11)
+      return this.whoMoveGame === 'dealer' || this.playerSumPoints > 21 || this.playerBlackJack && (this.dealerSumPoints !== 10 && this.dealerSumPoints !== 11)
     },
     disabledBtnHit() {
       return this.playerSumPoints >= 21 || this.whoMoveGame === 'dealer' || this.playerBlackJack
@@ -315,6 +359,8 @@ export default {
       this.dealerBlackJack = false
       this.whoMoveGame = 'player'
       this.winner = 'no-winner'
+      this.betPlayer = 10
+      this.winPayDollar = 0
       await this.$store.dispatch('getFirstThreeCardForStart')
     }
   }
@@ -360,6 +406,12 @@ export default {
   font-size: 30px;
   font-weight: bold;
   color: #F7A740;
+}
+
+.bet {
+  width: 90%;
+  display: flex;
+  justify-content: start;
 }
 
 .bet_num {
