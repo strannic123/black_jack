@@ -77,13 +77,15 @@ export default new Vuex.Store({
             //     "suit": "DIAMONDS"
             // },
         ],
+        playerBank: 1000
     },
     getters: {
         getFullDeck: state => state.fullDesc,
         getDeckIdForSet: state => state.fullDesc[0].deck_id,
         getDeckId: state => state.deckId,
         getDealerCards: state => state.dealerCards,
-        getPlayerCards: state => state.playerCards
+        getPlayerCards: state => state.playerCards,
+        getPlayerBank: state => state.playerBank
 
     },
     mutations: {
@@ -109,6 +111,12 @@ export default new Vuex.Store({
         },
         SET_RESET_PLAYER_CARD(state) {
             state.playerCards = []
+        },
+        SET_BANK_WIN_PLAYER(state, dollar) {
+            state.playerBank += dollar
+        },
+        SET_BANK_WIN_DEALER(state, dollar) {
+            state.playerBank -= dollar
         }
 
 
@@ -146,7 +154,12 @@ export default new Vuex.Store({
             if (what === 'HIT') {
                 commit('SET_CARD_PLAYER', cards[0])
             }
-
+        },
+        setBankWinPlayer({commit}, dollar) {
+            commit('SET_BANK_WIN_PLAYER', dollar)
+        },
+        setBankWinDealer({commit}, dollar) { // так же используем для ставки перед раздачей
+            commit('SET_BANK_WIN_DEALER', dollar)
         }
     }
 
