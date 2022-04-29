@@ -25,7 +25,7 @@
         <div class="control">
           <div class="bank">
             <p class="bank_title">Деньги игрока</p>
-            <span class="bank_num">$ 1000</span>
+            <span class="bank_num">$ {{getPlayerBank}}</span>
           </div>
 
           <div class="buttons">
@@ -90,6 +90,7 @@ export default {
       'getDeckId',
       'getDealerCards',
       'getPlayerCards',
+      'getPlayerBank'
     ]),
 
     checkNewCardPlayer() {

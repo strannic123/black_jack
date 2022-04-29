@@ -117,6 +117,9 @@ export default new Vuex.Store({
         },
         SET_BANK_WIN_DEALER(state, dollar) {
             state.playerBank -= dollar
+        },
+        SET_BET_FOR_GAME(state, dollar) {
+            state.playerBank -= dollar
         }
 
 
@@ -138,10 +141,12 @@ export default new Vuex.Store({
             commit('SET_RESET_DEALER_CARD')
             commit('SET_RESET_PLAYER_CARD')
             const {cards} = await getFirstThreeCard()
+            commit('SET_BET_FOR_GAME', 10)
             console.log('FIRST_THREE', cards)
             commit('SET_CARD_PLAYER', cards[0])
             commit('SET_CARD_DEALER', cards[1])
             commit('SET_CARD_PLAYER', cards[2])
+
         },
         async getNextCard({commit}, what) {
             const {cards} = await getNextCard()
@@ -160,7 +165,8 @@ export default new Vuex.Store({
         },
         setBankWinDealer({commit}, dollar) { // так же используем для ставки перед раздачей
             commit('SET_BANK_WIN_DEALER', dollar)
-        }
+        },
+
     }
 
 })
