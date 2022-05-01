@@ -333,6 +333,7 @@ export default {
   color: #2c3e50;
 }
 
+
 .wrapper {
   overflow: hidden;
   display: flex;

@@ -60,4 +60,11 @@ export default {
   cursor: no-drop;
 }
 
+@media screen and (min-width: 1024px){
+  .btn {
+    font-size: 40px;
+    padding: 10px 20px;
+  }
+}
+
 </style>

@@ -29,4 +29,10 @@ export default {
   width: 150px;
 }
 
+@media screen and (min-width: 1024px){
+  .cards {
+    min-height: 208px;
+  }
+}
+
 </style>
