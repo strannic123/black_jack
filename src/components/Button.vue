@@ -37,7 +37,7 @@ export default {
 <style scoped>
 
 .btn {
-  font-size: 45px;
+  font-size: 40px;
   font-weight: bold;
   color: #FDF22C;
   background: #00000069;
@@ -62,7 +62,6 @@ export default {
 
 @media screen and (min-width: 1024px) and (max-width: 1200px){
   .btn {
-    font-size: 40px;
     padding: 10px 20px;
   }
 }
