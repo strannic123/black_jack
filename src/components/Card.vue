@@ -23,22 +23,11 @@ export default {
 <style scoped>
 .cards {
   display: flex;
+  min-height: 208px;
 }
 
 .card img {
   width: 150px;
-}
-
-@media screen and (min-width: 1024px){
-  .cards {
-    min-height: 208px;
-  }
-}
-
-@media screen and (min-width: 768px){
-  .cards {
-    min-height: 208px;
-  }
 }
 
 </style>

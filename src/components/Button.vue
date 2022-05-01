@@ -60,14 +60,14 @@ export default {
   cursor: no-drop;
 }
 
-@media screen and (min-width: 1024px){
+@media screen and (min-width: 1024px) and (max-width: 1200px){
   .btn {
     font-size: 40px;
     padding: 10px 20px;
   }
 }
 
-@media screen and (min-width: 768px){
+@media screen and (min-width: 768px) and (max-width: 1023px){
   .btn {
     font-size: 30px;
     margin-left: 14px;
