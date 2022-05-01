@@ -67,4 +67,15 @@ export default {
   }
 }
 
+@media screen and (min-width: 768px){
+  .btn {
+    font-size: 30px;
+    margin-left: 14px;
+    padding: 10px 20px;
+  }
+}
+
+
+
 </style>
+

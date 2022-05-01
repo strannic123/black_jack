@@ -406,6 +406,11 @@ export default {
   font-weight: bold;
   color: gold;
   padding-top: 10px;
+}
 
+@media screen and (min-width: 768px){
+  .header {
+    font-size: 50px;
+  }
 }
 </style>
