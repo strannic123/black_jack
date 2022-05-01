@@ -1,9 +1,10 @@
 
 #  Black Jack (Vue)
 
-## Полноценный вариант игры в Black Jack
+## Вариант игры в Black Jack - аналог игры казино 
+### Игра предназначена для Tablet, Laptop, Desktop
 
-## ![Imgur](https://i.imgur.com/plbf44x.gif)
+## ![Imgur](https://i.imgur.com/s5KMtFY.gif)
 
 
 ## Project setup
