@@ -1,6 +1,6 @@
 const numberDesc = 6
 const baseUrl = 'https://deckofcardsapi.com/api/deck'
-const idDesc = 'c8ie1dldbojc'
+const idDesc = 'jitlb8pqtk32'
 const newDescCardUrl = `/${idDesc}/shuffle/?deck_count=${numberDesc}` // хвост url новой колоды + shuffle
 
 
