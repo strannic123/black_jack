@@ -122,9 +122,7 @@ export default {
 
 
   },
-  mounted() {
 
-  },
   methods: {
     // авто набор дилера
     async setCardDealer() {

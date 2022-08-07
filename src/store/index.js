@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import {getApiDesc, getFirstThreeCard, getNextCard} from "../api/fullDeckCard";
+import { getApiDesc, getFirstThreeCard, getNextCard, getFullDeckId} from "../api/fullDeckCard";
 
 Vue.use(Vuex)
 
@@ -59,9 +59,11 @@ export default new Vuex.Store({
     },
     actions: {
         async fullDeckCard({commit}) {
-            const data = await getApiDesc()
-            commit('SET_FULL_DESK', data)
-
+            const fullDeck = await getFullDeckId()
+            if(fullDeck) {
+                const data = await getApiDesc()
+                commit('SET_FULL_DESK', data)
+            }
         },
         async saveIdDeck({commit, getters}) {
             if (getters.getFullDeck.length) {
